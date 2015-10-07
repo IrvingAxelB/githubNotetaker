@@ -35,11 +35,13 @@ var styles = StyleSheet.create({
 
 class Badge extends React.Component{
   render(){
-    <View style={styles.container}>
-      <Image style={styles.image} source={{usi: this.props.userInfo.avatar_url}} />
-      <Text style={styles.name}> {this.props.userInfo.name} </Text>
-      <Text style={style.handle}> {this.props.userInfo.login} </Text>
-    </View>
+    return(
+      <View style={styles.container}>
+        <Image style={styles.image} source={{usi: this.props.userInfo.avatar_url}} />
+        <Text style={styles.name}> {this.props.userInfo.name} </Text>
+        <Text style={styles.handle}> {this.props.userInfo.login} </Text>
+      </View>
+    );
   }
 };
 
