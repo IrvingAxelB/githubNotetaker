@@ -1,6 +1,6 @@
 var React = require('react-native');
 var api = require('../Utils/api');
-// var Dashboard = require('./Dashboard');
+var Dashboard = require('./Dashboard');
 
 var {
   View,
@@ -70,15 +70,20 @@ class Main extends React.Component{
     })
   }
   handleResponse(res){
+    // checks if github res has message of 'not found, will not load'
+    // else it will load data and change push new view
+    // will then turn of load, error = false, and reset username
     if(res.message === 'Not Found'){
       this.setState({
         error: 'User not found',
         isLoading: false
       })
     } else {
+      // inside this state changer you can send
+      // title for the page, the component, and passProps into it as well.
       this.props.navigator.push({
         title: res.name || 'Select an Option',
-    
+        component: Dashboard, 
         passProps: {userInfo: res}
       });
       this.setState({
