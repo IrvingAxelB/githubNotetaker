@@ -1,9 +1,14 @@
 var React = require('react-native');
+var api = require('../Utils/api');
+// var Dashboard = require('./Dashboard');
 
 var {
-  View, 
+  View,
   Text,
-  StyleSheet
+  StyleSheet,
+  TextInput,
+  TouchableHighlight,
+  ActivityIndicatorIOS
 } = React;
 
 var styles = StyleSheet.create({
@@ -15,7 +20,6 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#48BBEC'
   },
-
   title: {
     marginBottom: 20,
     fontSize: 25,
@@ -27,9 +31,15 @@ var styles = StyleSheet.create({
     padding: 4,
     marginRight: 5,
     fontSize: 23,
-    color: '#fff',
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 8,
+    color: 'white'
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#111',
     alignSelf: 'center'
-
   },
   button: {
     height: 45,
@@ -42,15 +52,71 @@ var styles = StyleSheet.create({
     marginTop: 10,
     alignSelf: 'stretch',
     justifyContent: 'center'
-  }
-
+  },
 });
 
 class Main extends React.Component{
-  render(){
+  constructor(props){
+    super(props)
+    this.state = {
+      username: '',
+      isLoading: false,
+      error: false
+    }
+  }
+  handleChange(e){
+    this.setState({
+      username: e.nativeEvent.text
+    })
+  }
+  handleResponse(res){
+    if(res.message === 'Not Found'){
+      this.setState({
+        error: 'User not found',
+        isLoading: false
+      })
+    } else {
+      this.props.navigator.push({
+        title: res.name || 'Select an Option',
+    
+        passProps: {userInfo: res}
+      });
+      this.setState({
+        isLoading: false,
+        error: false,
+        username: ''
+      });
+    }
+  }
+  handleSubmit(){
+    this.setState({
+      isLoading: true,
+    });
+    api.getBio(this.state.username)
+      .then((jsonRes) => this.handleResponse(jsonRes))
+      .catch((err) => {
+        this.setState({
+          isLoading: false,
+          error: `There was an error: ${err}`
+        })
+      })
+  }
+  render() {
     return (
       <View style={styles.mainContainer}>
-        <Text> Testing the router </Text>
+        <Text style={styles.title}>
+          Search for a Github User
+        </Text>
+        <TextInput
+          style={styles.searchInput}
+          value={this.state.username}
+          onChange={this.handleChange.bind(this)} />
+        <TouchableHighlight
+          style={styles.button}
+          onPress={this.handleSubmit.bind(this)}
+          underlayColor="white">
+            <Text style={styles.buttonText}>SEARCH</Text>
+        </TouchableHighlight>
       </View>
     );
   }
