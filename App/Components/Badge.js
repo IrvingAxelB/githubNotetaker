@@ -1,11 +1,11 @@
 var React = require('react-native');
 
-var (
+var {
   Text,
   View,
   Image, 
   StyleSheet
-) = React;
+} = React;
 
 var styles = StyleSheet.create({
   container: {
