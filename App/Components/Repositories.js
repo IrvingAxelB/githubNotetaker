@@ -43,9 +43,10 @@ class Repositories extends React.Component{
 
   render(){
     var repos = this.props.repos;
+    // not all repos have a description*
     var list = repos.map((item, index) => {
-      var desc = repos[index].description ? <Text style={styles.description}> {repos[index].description} </Text> : <View/>
 
+      var desc = repos[index].description ? <Text style={styles.description}> {repos[index].description} </Text> : <View/>
       return (
         <View key={index}>
           <View style={styles.rowContainer}>
@@ -60,9 +61,8 @@ class Repositories extends React.Component{
           <Separator />
         </View>
       );
-
     })
-    
+
     return (
       <ScrollView style={styles.container}>
         <Badge userInfo={this.props.userInfo} />

@@ -1,6 +1,7 @@
 var React = require('react-native');
 var Profile = require('./Profile');
 var Repositories = require('./Repositories');
+var api = require('../Utils/api');
 
 var {
   Text,
@@ -57,11 +58,25 @@ class Dashboard extends React.Component{
 
   goToRepos(){
     console.log('going to repos');
-    this.props.navigator.push({
-      component: Repositories,
-      title: 'Repos Page',
-      passProps: {userInfo: this.props.userInfo}
-    })
+
+    // userInfo.login is the username we are dealing with.
+    // this returns a promise from api
+    api.getRepos(this.props.userInfo.login)
+      .then((res) => {
+
+        // you can push a navigator.push inside of a promise that is 
+        // retrieving data for you!
+        this.props.navigator.push({
+          component: Repositories,
+          title: 'Repos',
+          passProps: {
+            userInfo: this.props.userInfo,
+            repos: res
+          }
+        })
+
+      });
+
   }
 
   goToNotes(){
@@ -73,6 +88,7 @@ class Dashboard extends React.Component{
     return (
       <View style={styles.container}>
         <Image source={{uri: this.props.userInfo.avatar_url}} style={styles.image} />
+        
         <TouchableHighlight
           style={this.makeBackground(0)}
           onPress={this.goToProfile.bind(this)}
@@ -93,6 +109,7 @@ class Dashboard extends React.Component{
           underlayColor='#88D4F5'>
             <Text style={styles.buttonText}> View Notes </Text>
         </TouchableHighlight>
+
       </View>
     );
   }
