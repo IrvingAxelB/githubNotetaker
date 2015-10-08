@@ -3,7 +3,8 @@ var React = require('react-native');
 var {
   Text,
   WebView,
-  StyleSheet
+  StyleSheet,
+  View
 } = React;
 
 var styles = StyleSheet.create({
@@ -20,7 +21,7 @@ class Web extends React.Component{
       <View style={styles.container}>
         <WebView url={this.props.url} />
       </View>
-    )
+    );
   }
 };
 
